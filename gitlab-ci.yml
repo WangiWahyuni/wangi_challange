@@ -1,0 +1,15 @@
+stages:
+  - cleancode
+  - test
+  - deploy
+
+Deploy to Heroku:
+  stage: deploy
+  image: ruby:latest
+  before_script:
+    - gem install dpl
+  only:
+    - main
+    - master
+  script:
+    - dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_API_KEY
