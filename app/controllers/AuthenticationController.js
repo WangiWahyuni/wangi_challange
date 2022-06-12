@@ -61,7 +61,7 @@ class AuthenticationController extends ApplicationController {
         return;
       }
 
-      const isPasswordCorrect = this.verifyPassword(password, user.encryptedPassword);
+      const isPasswordCorrect = await this.verifyPassword(password, user.encryptedPassword);
 
       if (!isPasswordCorrect) {
         const err = new WrongPasswordError();
@@ -69,9 +69,9 @@ class AuthenticationController extends ApplicationController {
         return;
       }
 
-      const accessToken = this.createTokenFromUser(user, user.Role);
+      const accessToken = await this.createTokenFromUser(user, user.Role);
 
-      res.status(201).json({
+      res.status(200).json({
         accessToken,
       });
     } catch (err) {
@@ -93,7 +93,7 @@ class AuthenticationController extends ApplicationController {
       }
 
       const role = await this.roleModel.findOne({
-        where: { name: this.accessControl.CUSTOMER },
+        where: { name: this.accessControl.ADMIN },
       });
 
       const user = await this.userModel.create({
@@ -151,7 +151,7 @@ class AuthenticationController extends ApplicationController {
   encryptPassword = (password) => this.bcrypt.hashSync(password, 10);
 
   verifyPassword = (password, encryptedPassword) => {
-    this.bcrypt.compareSync(password, encryptedPassword);
+    return this.bcrypt.compareSync(password, encryptedPassword);
   };
 }
 

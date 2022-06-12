@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('./app/index');
-const swagger = require('./docs/swagger.json');
+const app = require('../app');
+const swagger = require('../docs/swagger.json');
 
 describe('GET /documentation.json', () => {
   it('should response with 200 as status code', async () => request(app)
